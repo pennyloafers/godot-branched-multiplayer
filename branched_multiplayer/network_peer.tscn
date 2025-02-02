@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://e72sa16ymieg"]
+
+[ext_resource type="Script" path="res://branched_multiplayer/network_peer.gd" id="1_oehbo"]
+
+[node name="NetworkPeer" type="Node"]
+script = ExtResource("1_oehbo")
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath("..")

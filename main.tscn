@@ -1,0 +1,79 @@
+[gd_scene load_steps=6 format=3 uid="uid://bdw065tuqw0ly"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_bmbsv"]
+[ext_resource type="PackedScene" uid="uid://b7m6e1s40hn4w" path="res://track.tscn" id="2_uwfxu"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gpwny"]
+sky_horizon_color = Color(0.0498163, 0.0522095, 0.0559873, 1)
+ground_horizon_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Sky" id="Sky_ii4jo"]
+sky_material = SubResource("ProceduralSkyMaterial_gpwny")
+
+[sub_resource type="Environment" id="Environment_rmpr8"]
+background_mode = 2
+sky = SubResource("Sky_ii4jo")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Main" type="Node"]
+script = ExtResource("1_bmbsv")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_rmpr8")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Track" parent="." instance=ExtResource("2_uwfxu")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="ClientSideInput" type="CheckBox" parent="VBoxContainer"]
+layout_mode = 2
+text = "Client side Input"
+
+[node name="PostionSync" type="CheckBox" parent="VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+text = "position"
+
+[node name="LinearVelSync" type="CheckBox" parent="VBoxContainer"]
+layout_mode = 2
+text = "linear velocity"
+
+[node name="AngularVelSync" type="CheckBox" parent="VBoxContainer"]
+layout_mode = 2
+text = "angular velocity"
+
+[node name="RotationSync" type="CheckBox" parent="VBoxContainer"]
+layout_mode = 2
+text = "rotation"
+
+[node name="ReplicationInterval" type="SpinBox" parent="VBoxContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/ReplicationInterval"]
+layout_mode = 0
+offset_left = 180.0
+offset_right = 309.0
+offset_bottom = 23.0
+text = "Replication Time"
+
+[connection signal="toggled" from="VBoxContainer/ClientSideInput" to="." method="_on_client_side_input_toggled"]
+[connection signal="toggled" from="VBoxContainer/PostionSync" to="." method="_on_postion_sync_toggled"]
+[connection signal="toggled" from="VBoxContainer/LinearVelSync" to="." method="_on_linear_vel_sync_toggled"]
+[connection signal="toggled" from="VBoxContainer/AngularVelSync" to="." method="_on_angular_vel_sync_toggled"]
+[connection signal="toggled" from="VBoxContainer/RotationSync" to="." method="_on_rotation_sync_toggled"]
+[connection signal="value_changed" from="VBoxContainer/ReplicationInterval" to="." method="_on_replication_interval_value_changed"]
