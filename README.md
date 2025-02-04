@@ -28,4 +28,4 @@ This repository is an exploration of Godot 4.x SceneMultiplayer API to its fulle
 
 [all.webm](https://github.com/user-attachments/assets/76c9e647-208d-4d89-9c44-54f2064c1a9a)
 
-[all_short.webm](https://github.com/user-attachments/assets/525a4eed-0b4f-4b01-9049-ea0731ac60bd)
+[obstacles.webm](https://github.com/user-attachments/assets/3e6ff79a-82b1-4159-833d-e20439804297)
