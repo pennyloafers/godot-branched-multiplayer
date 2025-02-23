@@ -3,6 +3,7 @@ class_name MyMultiplayer
 
 # We want to augment the default SceneMultiplayer.
 var base_multiplayer = SceneMultiplayer.new()
+signal peer_authenticating(id:int)
 
 func _init():
 	# Just passthrough base signals (copied to var to avoid cyclic reference)
@@ -14,6 +15,7 @@ func _init():
 	base_multiplayer.connection_failed.connect(func(): cf.emit())
 	base_multiplayer.peer_connected.connect(func(id): pc.emit(id))
 	base_multiplayer.peer_disconnected.connect(func(id): pd.emit(id))
+	base_multiplayer.peer_authenticating.connect(func(id): peer_authenticating.emit(id))
 
 func _poll():
 	return base_multiplayer.poll()
@@ -63,9 +65,6 @@ func _get_peer_ids() -> PackedInt32Array:
 
 func set_auth_callback(cb:Callable):
 	base_multiplayer.auth_callback = cb
-
-func get_peer_authenticating_signal()->Signal:
-	return base_multiplayer.peer_authenticating
 
 func send_auth(id:int, data:PackedByteArray):
 	base_multiplayer.send_auth(id, data)

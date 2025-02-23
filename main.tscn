@@ -1,18 +1,18 @@
 [gd_scene load_steps=6 format=3 uid="uid://bdw065tuqw0ly"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_bmbsv"]
-[ext_resource type="PackedScene" uid="uid://b7m6e1s40hn4w" path="res://track.tscn" id="2_uwfxu"]
+[ext_resource type="PackedScene" uid="uid://b7m6e1s40hn4w" path="res://examples/track.tscn" id="2_uwfxu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gpwny"]
 sky_horizon_color = Color(0.0498163, 0.0522095, 0.0559873, 1)
 ground_horizon_color = Color(0, 0, 0, 1)
 
-[sub_resource type="Sky" id="Sky_ii4jo"]
+[sub_resource type="Sky" id="Sky_5wi6d"]
 sky_material = SubResource("ProceduralSkyMaterial_gpwny")
 
 [sub_resource type="Environment" id="Environment_rmpr8"]
 background_mode = 2
-sky = SubResource("Sky_ii4jo")
+sky = SubResource("Sky_5wi6d")
 tonemap_mode = 2
 glow_enabled = true
 

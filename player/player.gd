@@ -38,13 +38,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		#print(name," pressed ", event.is_pressed())
 		move = event.is_pressed()
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	var x = Vector3.ZERO
 	x.x -= global_position.x
 	apply_central_force( x * 1) #center
-	if multiplayer.is_server() || Main.get_instance().client_side_input:
-		apply_central_force(Vector3.MODEL_FRONT * int(move) * 4) #forward
-		apply_torque(Vector3.UP  * int(move))
+	apply_central_force(Vector3.MODEL_FRONT * int(move) * 4) #forward
+	apply_torque(Vector3.UP  * int(move))
 	set_labels()
 
 func set_labels():
