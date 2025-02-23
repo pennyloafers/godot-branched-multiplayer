@@ -101,7 +101,7 @@ func reset() -> void:
 func _on_reset_pressed() -> void:
 	reset()
 
-func _on_scene_options_split_view_change(split_view: bool) -> void:
+func _on_scene_options_split_view_change(_split_view: bool) -> void:
 	reset()
 
 
