@@ -28,10 +28,17 @@ func _on_tree_item_edited() -> void:
 				function.call(item.get_range(0))
 		TreeItem.CELL_MODE_CHECK:
 			print("CheckBox item edited: %s is %s" % [item.get_text(0), item.is_checked(0)])
-			var callables : Array = item.get_metadata(0)
-			if not callables.is_empty():
-				var callable : Callable = callables[int(item.is_checked(0))]
-				callable.call()
+			# if top item change all children
+			if item.get_metadata(0) is StringName and item.get_metadata(0) == &"propogate":
+				for subitem:TreeItem in item.get_children():
+					if subitem.get_cell_mode(0) == TreeItem.CELL_MODE_CHECK:
+						tree.set_selected(subitem,0)
+						tree.edit_selected()
+			else:
+				var callables : Array = item.get_metadata(0)
+				if not callables.is_empty():
+					var callable : Callable = callables[int(item.is_checked(0))]
+					callable.call()
 		TreeItem.CELL_MODE_STRING:
 			print("String item edited: %s is %s" % [item.get_text(0), item.is_checked(0)])
 
@@ -39,9 +46,14 @@ func _on_tree_item_edited() -> void:
 func parse_syncer( syncer:MultiplayerSynchronizer, scene_path:NodePath ) -> void:
 	print(name, ": parse")
 
-	# Tree Item: Node name and path ============================
+	# Tree Item: Sync Node name and path, allow master enable/disable==================
 	var item := tree.create_item(root)
+	item.set_cell_mode(0,TreeItem.CELL_MODE_CHECK)
 	create_title_item(item, "%s %d" % [scene_path, syncer.get_multiplayer_authority()])
+	item.set_collapsed_recursive(false)
+	item.set_checked(0,true)
+	item.set_editable(0,true)
+	item.set_metadata(0,&"propogate")
 
 	# Sub Syncer options sync intervals, uses function binds to set values of specific
 	var sub_item = tree.create_item(item)
@@ -80,12 +92,14 @@ func parse_syncer( syncer:MultiplayerSynchronizer, scene_path:NodePath ) -> void
 		sub_prop_item = tree.create_item(prop_item)
 		create_checkbox_item(sub_prop_item, on_spawn, "OnSpawn")
 		# Tree ============================
-
-	#update replicaiton config.
+	#Collapse tree deffered so all treeitems render once and avoid errors with propogate
+	item.set_collapsed_recursive.call_deferred(true)
 
 
 # Tree ============================
 func create_title_item( item:TreeItem, title:String, collapsed:bool = true, column:int = 0) -> void:
+	#set checked so title entry is not inditerminete
+	item.set_checked(0,true)
 	item.set_text(column, title)
 	item.set_selectable(column, false)
 	item.set_collapsed_recursive(collapsed)
@@ -99,6 +113,8 @@ func create_checkbox_item( item:TreeItem, checked:bool, text:String, column:int 
 
 func create_range_item( item:TreeItem, range_config:Variant, value:float, column:int = 0) -> void:
 	item.set_cell_mode(column, TreeItem.CELL_MODE_RANGE)
+	#set checked so title entry is not inditerminete
+	item.set_checked(0,true)
 	if range_config is Array[float] and range_config.size() == 3:
 		item.set_range_config(column, range_config[0], range_config[1], range_config[2])
 	elif range_config is String:
@@ -108,3 +124,4 @@ func create_range_item( item:TreeItem, range_config:Variant, value:float, column
 	item.set_editable(column, true)
 	item.set_range(column, value)
 	item.set_text_alignment(column, HORIZONTAL_ALIGNMENT_LEFT)
+	
