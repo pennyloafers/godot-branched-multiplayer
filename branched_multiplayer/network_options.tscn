@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://c4npj6y0q3lhp"]
+
+[node name="Network" type="VBoxContainer"]
+offset_right = 143.0
+offset_bottom = 121.0
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 2
+text = "Network Options"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+max_value = 30.0
+page = 5.0
+alignment = 2
+prefix = "Delay"
+suffix = "Frames"
+
+[node name="HSlider" type="HSlider" parent="."]
+layout_mode = 2
+
+[node name="JitterCheckButton" type="CheckButton" parent="."]
+layout_mode = 2
+text = "Enable Jitter"

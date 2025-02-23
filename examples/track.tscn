@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://b7m6e1s40hn4w"]
+[gd_scene load_steps=5 format=3 uid="uid://b7m6e1s40hn4w"]
 
 [sub_resource type="GDScript" id="GDScript_mi5qy"]
 resource_name = "track"
@@ -30,7 +30,27 @@ func create_obsticle(pos:Vector3):
 	add_child(ob)
 "
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_if400"]
+sky_horizon_color = Color(0.0498163, 0.0522095, 0.0559873, 1)
+ground_horizon_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Sky" id="Sky_ii4jo"]
+sky_material = SubResource("ProceduralSkyMaterial_if400")
+
+[sub_resource type="Environment" id="Environment_t2r88"]
+background_mode = 2
+sky = SubResource("Sky_ii4jo")
+tonemap_mode = 2
+glow_enabled = true
+
 [node name="Track" type="Node3D"]
 script = SubResource("GDScript_mi5qy")
 marker_spacing = 10.0
 offset = 10.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_t2r88")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true

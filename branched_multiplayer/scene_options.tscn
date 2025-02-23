@@ -1,0 +1,53 @@
+[gd_scene load_steps=2 format=3 uid="uid://bv3x4endub1kn"]
+
+[ext_resource type="Script" path="res://branched_multiplayer/scene_options.gd" id="1_0isji"]
+
+[node name="SceneOptions" type="VBoxContainer"]
+script = ExtResource("1_0isji")
+scene_path = "res://player/player.tscn"
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 2
+text = "Scene Options"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SplitViewCheckButton" type="CheckButton" parent="."]
+layout_mode = 2
+text = "SplitView"
+
+[node name="TextEdit" type="LineEdit" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+placeholder_text = "open a scene"
+editable = false
+context_menu_enabled = false
+virtual_keyboard_enabled = false
+shortcut_keys_enabled = false
+middle_mouse_paste_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+
+[node name="FileDialogButton" type="Button" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Open File"
+
+[node name="FileDialog" type="FileDialog" parent="FileDialogButton"]
+unique_name_in_owner = true
+title = "Open a File"
+size = Vector2i(560, 300)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+root_subfolder = "examples"
+filters = PackedStringArray("*.tscn")
+
+[connection signal="toggled" from="SplitViewCheckButton" to="." method="_on_split_view_check_button_toggled"]
+[connection signal="pressed" from="FileDialogButton" to="." method="_on_file_dialog_button_pressed"]
+[connection signal="file_selected" from="FileDialogButton/FileDialog" to="." method="_on_file_dialog_file_selected"]

@@ -3,7 +3,7 @@ class_name Obst
 
 
 static func create() -> Obst:
-	return preload("res://obstacle.tscn").instantiate()
+	return preload("res://examples/obstacle.tscn").instantiate()
 
 var time_acc:float = 0.0
 func _physics_process(delta: float) -> void:

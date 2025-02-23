@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://x24v8s7wonow"]
+
+[node name="ServerStats" type="VBoxContainer"]
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Server Stats:"

@@ -1,0 +1,38 @@
+[gd_scene load_steps=2 format=3 uid="uid://cq1hcl2hvlcty"]
+
+[sub_resource type="World3D" id="World3D_3ba0r"]
+
+[node name="SplitView" type="HSplitContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Server" type="SubViewportContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="ServerSubViewport" type="SubViewport" parent="Server"]
+unique_name_in_owner = true
+handle_input_locally = false
+size = Vector2i(570, 648)
+render_target_update_mode = 4
+
+[node name="Client" type="SubViewportContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="ClientSubViewport" type="SubViewport" parent="Client"]
+unique_name_in_owner = true
+own_world_3d = true
+world_3d = SubResource("World3D_3ba0r")
+handle_input_locally = false
+size = Vector2i(570, 648)
+render_target_update_mode = 4

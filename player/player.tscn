@@ -27,21 +27,6 @@ resource_local_to_scene = true
 material = SubResource("ShaderMaterial_rtud3")
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_wjw65"]
-properties/0/path = NodePath("MultiplayerSynchronizer:sync_pos")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath("MultiplayerSynchronizer:sync_lvel")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath("MultiplayerSynchronizer:sync_avel")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath("MultiplayerSynchronizer:sync_quat")
-properties/3/spawn = true
-properties/3/replication_mode = 1
-properties/4/path = NodePath("MultiplayerSynchronizer:sync_frame")
-properties/4/spawn = true
-properties/4/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kayh3"]
 properties/0/path = NodePath(".:move")
@@ -76,16 +61,19 @@ top_level = true
 [node name="Camera3D" type="Camera3D" parent="Arm"]
 transform = Transform3D(0.764383, -0.286663, 0.577532, 0, 0.895728, 0.444602, -0.644763, -0.339846, 0.684679, 2.30865, 1.77727, 2.73697)
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="." node_paths=PackedStringArray("sync_object")]
+root_path = NodePath(".")
 replication_interval = 0.2
 replication_config = SubResource("SceneReplicationConfig_wjw65")
 script = ExtResource("3_sfhkw")
+sync_object = NodePath("..")
 
 [node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_kayh3")
 script = ExtResource("4_yrwxq")
 
 [node name="GridContainer" type="GridContainer" parent="."]
+visible = false
 offset_right = 96.0
 offset_bottom = 50.0
 columns = 2

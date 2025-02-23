@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bv1frl3vhqde"]
 
-[ext_resource type="Script" path="res://obstacle.gd" id="1_uom38"]
+[ext_resource type="Script" path="res://examples/obstacle.gd" id="1_uom38"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_rsruv"]
 

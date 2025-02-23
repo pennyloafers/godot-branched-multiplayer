@@ -1,14 +1,14 @@
 class_name PhysicsSynchronizer
 extends MultiplayerSynchronizer
 
-@onready var sync_object : RigidBody3D = get_node(root_path)
+@export var sync_object : RigidBody3D
 @onready var body_state : PhysicsDirectBodyState3D = \
 	PhysicsServer3D.body_get_direct_state( sync_object.get_rid() )
-@export var sync_pos   : Vector3
-@export var sync_lvel  : Vector3
-@export var sync_avel  : Vector3
-@export var sync_quat  : Quaternion = Quaternion.IDENTITY
-@export var sync_frame : int = 0
+@export_storage var sync_pos   : Vector3
+@export_storage var sync_lvel  : Vector3
+@export_storage var sync_avel  : Vector3
+@export_storage var sync_quat  : Quaternion = Quaternion.IDENTITY
+@export_storage var sync_frame : int = 0
 
 @export var temp_hide : bool = false
 var ring_buffer:RingBuffer = RingBuffer.new()
@@ -22,6 +22,17 @@ enum {
 	ANG_VEL,
 	QUAT, # the quaternion is used for an optimized rotation state
 }
+
+func _init() -> void:
+	replication_config = SceneReplicationConfig.new()
+	replication_config.add_property(^".:sync_pos")
+	replication_config.add_property(^".:sync_lvel")
+	replication_config.add_property(^".:sync_avel")
+	replication_config.add_property(^".:sync_quat")
+	replication_config.add_property(^".:sync_frame")
+	for property in replication_config.get_properties():
+		replication_config.property_set_replication_mode(property, SceneReplicationConfig.REPLICATION_MODE_ALWAYS)
+		replication_config.property_set_spawn(property, true)
 
 
 func _ready():
@@ -53,15 +64,10 @@ func get_state(state : PhysicsDirectBodyState3D ):
 
 #copy array to state
 func set_state(state : PhysicsDirectBodyState3D, data:Array ):
-	var main = Main.get_instance()
-	if main.pos_sync:
-		state.transform.origin = data[ORIGIN]
-	if main.vel_sync:
-		state.linear_velocity = data[LIN_VEL]
-	if main.ang_vel_sync:
-		state.angular_velocity = data[ANG_VEL]
-	if main.rotation_sync:
-		state.transform.basis = Basis(data[QUAT])
+	state.transform.origin = data[ORIGIN]
+	state.linear_velocity = data[LIN_VEL]
+	state.angular_velocity = data[ANG_VEL]
+	state.transform.basis = Basis(data[QUAT])
 
 
 func get_physics_body_info():
@@ -79,7 +85,6 @@ func set_physics_body_info():
 
 func _physics_process(_delta):
 	if is_multiplayer_authority():
-		replication_interval = Main.get_instance().replication_time
 		sync_frame += 1
 		get_physics_body_info()
 	else:

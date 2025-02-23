@@ -9,7 +9,7 @@ static func get_instance() -> Main:
 	if instance:
 		return instance
 	else:
-		assert(true)
+		#assert(true)
 		return
 
 const PEERS : int = 2
