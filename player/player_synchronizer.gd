@@ -120,40 +120,16 @@ class RingBuffer extends Object:
 
 	func _init():
 		buf.resize(CAPACITY)
-		for i in buf.size():
+		for i in CAPACITY:
 			buf[i] = []
+		head = CAPACITY - SAFETY
 
 	func add(frame:Array):
 		if _increment(head) == tail: # full
-			_comsume_extra()
-		#if is_low():
-			#_produce_extra(frame)
+			print("physics syncer drop")
+			remove() #drop frame
 		buf[head]=frame
 		head = _increment(head)
-
-	func _comsume_extra():
-		#print( "RingBuffer: consume_extra")
-		var next_index = _increment(tail)
-		buf[next_index] = _interpolate(buf[tail], buf[next_index],0.5)
-		tail = next_index
-
-	func _produce_extra(frame:Array):
-		#print("RingBuffer: produce_extra")
-		var first_frame = _interpolate(buf[tail],frame, 0.33) # assume only one frame exists tail should point at it
-		var second_frame = _interpolate(buf[tail],frame, 0.66) # assume only one frame exists tail should point at it
-		buf[head]=first_frame
-		head = _increment(head)
-		buf[head] = second_frame
-		head = _increment(head)
-
-	func _interpolate(from:Array, to:Array, percentage:float) -> Array:
-		var frame:Array = [
-			from[ORIGIN].lerp(to[ORIGIN], percentage),
-			from[LIN_VEL].lerp(to[LIN_VEL], percentage),
-			from[ANG_VEL].lerp(to[ANG_VEL], percentage),
-			from[QUAT].slerp(to[QUAT], percentage)
-		]
-		return frame
 
 	func _increment(index:int)->int:
 		index += 1
@@ -171,6 +147,3 @@ class RingBuffer extends Object:
 
 	func is_empty() -> bool:
 		return tail == head
-
-	func is_low() -> bool:
-		return _increment(tail) == head

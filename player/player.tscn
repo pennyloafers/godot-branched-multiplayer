@@ -63,7 +63,6 @@ transform = Transform3D(0.764383, -0.286663, 0.577532, 0, 0.895728, 0.444602, -0
 
 [node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="." node_paths=PackedStringArray("sync_object")]
 root_path = NodePath(".")
-replication_interval = 0.2
 replication_config = SubResource("SceneReplicationConfig_wjw65")
 script = ExtResource("3_sfhkw")
 sync_object = NodePath("..")
