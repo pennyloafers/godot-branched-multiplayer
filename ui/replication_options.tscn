@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bthgkl73sob7y"]
 
-[ext_resource type="Script" path="res://branched_multiplayer/replication_options.gd" id="1_gvnu0"]
+[ext_resource type="Script" path="res://ui/replication_options.gd" id="1_gvnu0"]
 
 [node name="ReplicationOptions" type="VBoxContainer" node_paths=PackedStringArray("tree")]
 size_flags_vertical = 3

@@ -15,6 +15,15 @@ run/main_scene="res://branched_multiplayer.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+
+[gdunit4]
+
+Shortcuts/editor/run_test=PackedInt32Array(4194338)
+Shortcuts/editor/run_test_debug=PackedInt32Array(4194339)
+
 [physics]
 
 3d/default_gravity=0.0

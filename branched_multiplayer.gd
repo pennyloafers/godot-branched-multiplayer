@@ -17,17 +17,17 @@ func create_split_view():
 
 	# setup networks
 	var server:NetworkPeer = NetworkPeer.create(NetworkPeer.SERVER)
-	server.set_player_node("res://player/player.tscn")
+	server.set_player_res("res://player/player.tscn")
 	server.new_player.connect(_on_new_player_created, CONNECT_ONE_SHOT)
 	
 
 	var client:NetworkPeer = NetworkPeer.create(NetworkPeer.CLIENT)
-	client.set_player_node("res://player/player.tscn")
+	client.set_player_res("res://player/player.tscn")
 	client.new_player.connect(_on_new_player_created, CONNECT_ONE_SHOT)
 	
 	
 	# setup view
-	view_scene = preload("res://branched_multiplayer/split_view.tscn").instantiate()
+	view_scene = preload("res://scene/split_view.tscn").instantiate()
 	view.add_child(view_scene)
 
 	# setup scenes
@@ -41,15 +41,15 @@ func create_single_view():
 
 	# setup networks
 	var server:NetworkPeer = NetworkPeer.create(NetworkPeer.SERVER)
-	server.set_player_node("res://player/player.tscn")
+	server.set_player_res("res://player/player.tscn")
 	server.new_player.connect(_on_new_player_created, CONNECT_ONE_SHOT)
 
 	var client:NetworkPeer = NetworkPeer.create(NetworkPeer.CLIENT)
-	client.set_player_node("res://player/player.tscn")
+	client.set_player_res("res://player/player.tscn")
 	client.new_player.connect(_on_new_player_created, CONNECT_ONE_SHOT)
 	
 	# setup view
-	view_scene = preload("res://branched_multiplayer/single_view.tscn").instantiate()
+	view_scene = preload("res://scene/single_view.tscn").instantiate()
 	view.add_child(view_scene)
 
 	# setup scenes
@@ -59,7 +59,7 @@ func create_single_view():
 
 ### This works okay, but when using a ring-buffer the physics syncer holds
 ### stale data. Because recieving syncrhonizer checks packet size errors will
-### throw if there are delayed packets waiting to be processed.
+### log if there are delayed packets waiting to be processed.
 var reference_synchronizers : Array[Node]
 var reference_paths : Array[NodePath]
 func _on_new_player_created(player_node:Node) -> void:

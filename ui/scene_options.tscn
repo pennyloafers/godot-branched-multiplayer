@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bv3x4endub1kn"]
 
-[ext_resource type="Script" path="res://branched_multiplayer/scene_options.gd" id="1_0isji"]
+[ext_resource type="Script" path="res://ui/scene_options.gd" id="1_0isji"]
 
 [node name="SceneOptions" type="VBoxContainer"]
 script = ExtResource("1_0isji")

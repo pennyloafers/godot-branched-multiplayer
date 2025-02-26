@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=3 uid="uid://c0e2uouucpnju"]
 
 [ext_resource type="Script" path="res://branched_multiplayer.gd" id="1_5uw2j"]
-[ext_resource type="PackedScene" uid="uid://bv3x4endub1kn" path="res://branched_multiplayer/scene_options.tscn" id="2_lkf4v"]
-[ext_resource type="PackedScene" uid="uid://c4npj6y0q3lhp" path="res://branched_multiplayer/network_options.tscn" id="3_nvuel"]
-[ext_resource type="PackedScene" uid="uid://bthgkl73sob7y" path="res://branched_multiplayer/replication_options.tscn" id="4_p1rq2"]
-[ext_resource type="PackedScene" uid="uid://x24v8s7wonow" path="res://branched_multiplayer/peer_stats.tscn" id="5_6bh2h"]
-[ext_resource type="PackedScene" uid="uid://dbpfj6ktqqfgj" path="res://branched_multiplayer/net_stats.tscn" id="6_nhrjv"]
+[ext_resource type="PackedScene" uid="uid://bv3x4endub1kn" path="res://ui/scene_options.tscn" id="2_lkf4v"]
+[ext_resource type="PackedScene" uid="uid://c4npj6y0q3lhp" path="res://ui/network_options.tscn" id="3_nvuel"]
+[ext_resource type="PackedScene" uid="uid://bthgkl73sob7y" path="res://ui/replication_options.tscn" id="4_p1rq2"]
+[ext_resource type="PackedScene" uid="uid://x24v8s7wonow" path="res://ui/peer_stats.tscn" id="5_6bh2h"]
+[ext_resource type="PackedScene" uid="uid://dbpfj6ktqqfgj" path="res://ui/net_stats.tscn" id="6_nhrjv"]
 
 [node name="Main" type="Node" node_paths=PackedStringArray("options", "stats_view", "view")]
 script = ExtResource("1_5uw2j")
