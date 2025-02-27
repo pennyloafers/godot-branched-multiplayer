@@ -9,26 +9,37 @@ var synced_scene_res : PackedScene
 var server : NetworkPeer
 var client : NetworkPeer
 
+
+
 func _ready():
 	if %SceneOptions.is_split_view():
 		create_split_view()
 	else:
 		create_single_view()
 
+
+func ping_update(value:int) -> void:
+	$%NetStats.ping_update(value)
+
+
+func create_network_peer(type:int) -> NetworkPeer:
+	var peer:NetworkPeer
+	if type == NetworkPeer.CLIENT:
+		peer = NetworkPeer.create(NetworkPeer.CLIENT)
+		peer.ping.connect(ping_update)
+	elif type == NetworkPeer.SERVER:
+		peer = NetworkPeer.create(NetworkPeer.SERVER)
+	peer.set_player_res("res://player/player.tscn")
+	peer.new_player.connect(_on_new_player_created, CONNECT_ONE_SHOT)
+	return peer
+
 func create_split_view():
 	$"%SceneOptions".open_scene_with_current_path()
 
 	# setup networks
-	var server:NetworkPeer = NetworkPeer.create(NetworkPeer.SERVER)
-	server.set_player_res("res://player/player.tscn")
-	server.new_player.connect(_on_new_player_created, CONNECT_ONE_SHOT)
-	
+	server = create_network_peer(NetworkPeer.SERVER)
+	client = create_network_peer(NetworkPeer.CLIENT)
 
-	var client:NetworkPeer = NetworkPeer.create(NetworkPeer.CLIENT)
-	client.set_player_res("res://player/player.tscn")
-	client.new_player.connect(_on_new_player_created, CONNECT_ONE_SHOT)
-	
-	
 	# setup view
 	view_scene = preload("res://scene/split_view.tscn").instantiate()
 	view.add_child(view_scene)
@@ -44,13 +55,8 @@ func create_single_view():
 	$"%SceneOptions".open_scene_with_current_path() # why again?
 
 	# setup networks
-	server = NetworkPeer.create(NetworkPeer.SERVER)
-	server.set_player_res("res://player/player.tscn")
-	server.new_player.connect(_on_new_player_created, CONNECT_ONE_SHOT)
-
-	client = NetworkPeer.create(NetworkPeer.CLIENT)
-	client.set_player_res("res://player/player.tscn")
-	client.new_player.connect(_on_new_player_created, CONNECT_ONE_SHOT)
+	server = create_network_peer(NetworkPeer.SERVER)
+	client = create_network_peer(NetworkPeer.CLIENT)
 	
 	# setup view
 	view_scene = preload("res://scene/single_view.tscn").instantiate()
@@ -122,3 +128,13 @@ func find_synchronizers(scene:Node )->Array[Node]:
 func _on_network_options_frame_delay(value: int) -> void:
 	server.enet.network_frame_delay = value
 	client.enet.network_frame_delay = value
+
+
+func _on_network_options_jitter_enabled(value: bool) -> void:
+	server.enet.jitter_enabled = value
+	client.enet.jitter_enabled = value
+
+
+func _on_network_options_jitter_chance(value: float) -> void:
+	server.enet.jitter_chance = value
+	client.enet.jitter_chance = value

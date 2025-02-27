@@ -9,4 +9,4 @@ script = ExtResource("1_oehbo")
 spawn_path = NodePath("..")
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 3.0
+wait_time = 0.1

@@ -6,6 +6,11 @@ var _frame_buffer : Array[PackedByteArray]
 var delay_ring_buffer : RingBuffer # lock free
 
 var network_frame_delay : int = 0
+var jitter_enabled : bool = false
+var jitter : bool = false
+var jitter_chance : float = 0.5
+var jitter_frame : Array[PackedByteArray] = []
+var jitter_frame_count : int = 2
 
 func _init():
 	super()
@@ -18,10 +23,13 @@ func _init():
 # gdscript only as _put_packet() uses native parameters
 func _put_packet_script(p_buffer: PackedByteArray) -> Error:
 	#print(peer_type, ": packet ", p_buffer)
-	if network_frame_delay != 0:
-		_frame_buffer.push_back(p_buffer)
+	if jitter :
+		jitter_frame.push_back(p_buffer)
 	else:
-		enet.put_packet(p_buffer)
+		if network_frame_delay != 0:
+			_frame_buffer.push_back(p_buffer)
+		else:
+			enet.put_packet(p_buffer)
 	return OK
 
 
@@ -29,6 +37,21 @@ func _poll() -> void:
 	if network_frame_delay != 0:
 		delay_put_packet()
 	enet.poll()
+
+	# complete jitter
+	jitter_frame_count -= 1
+	if jitter and jitter_frame_count <= 0:
+		jitter = false
+		for pkt:PackedByteArray in jitter_frame:
+			_put_packet_script(pkt)
+		jitter_frame.clear()
+
+	# setup jitter
+	if jitter_enabled and jitter == false:
+		jitter = randf() < jitter_chance
+		jitter_frame_count = 0
+		if jitter:
+			jitter_frame_count = randi_range(1,5) #TODO make this adjustable
 
 
 func delay_put_packet():

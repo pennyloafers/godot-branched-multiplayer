@@ -140,7 +140,7 @@ func rtt(peer_time:int):
 @rpc("any_peer","unreliable","call_remote")
 func return_rtt(peer_time:int):
 	var now := Time.get_ticks_msec()
-	print("ping rtt: ", now-peer_time)
+	#print("ping rtt: ", now-peer_time)
 	ping.emit(now-peer_time)
 	
 	

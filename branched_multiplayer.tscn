@@ -59,6 +59,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="NetStats" parent="TwoColumn/StatsView/Stats" instance=ExtResource("6_nhrjv")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="View" type="Control" parent="TwoColumn/StatsView"]
@@ -69,3 +70,5 @@ size_flags_vertical = 3
 [connection signal="scene_selected" from="TwoColumn/Options/SceneOptions" to="." method="_on_scene_options_scene_selected"]
 [connection signal="split_view_change" from="TwoColumn/Options/SceneOptions" to="." method="_on_scene_options_split_view_change"]
 [connection signal="frame_delay" from="TwoColumn/Options/NetworkOptions" to="." method="_on_network_options_frame_delay"]
+[connection signal="jitter_chance" from="TwoColumn/Options/NetworkOptions" to="." method="_on_network_options_jitter_chance"]
+[connection signal="jitter_enabled" from="TwoColumn/Options/NetworkOptions" to="." method="_on_network_options_jitter_enabled"]
