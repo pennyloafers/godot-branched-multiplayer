@@ -6,6 +6,9 @@ extends Node
 
 var view_scene : Control
 var synced_scene_res : PackedScene
+var server : NetworkPeer
+var client : NetworkPeer
+
 func _ready():
 	if %SceneOptions.is_split_view():
 		create_split_view()
@@ -36,15 +39,16 @@ func create_split_view():
 	view_scene.get_node("%ClientSubViewport").add_child(client)
 	view_scene.get_node("%ClientSubViewport").add_child(preload("res://examples/track.tscn").instantiate())
 
+
 func create_single_view():
 	$"%SceneOptions".open_scene_with_current_path() # why again?
 
 	# setup networks
-	var server:NetworkPeer = NetworkPeer.create(NetworkPeer.SERVER)
+	server = NetworkPeer.create(NetworkPeer.SERVER)
 	server.set_player_res("res://player/player.tscn")
 	server.new_player.connect(_on_new_player_created, CONNECT_ONE_SHOT)
 
-	var client:NetworkPeer = NetworkPeer.create(NetworkPeer.CLIENT)
+	client = NetworkPeer.create(NetworkPeer.CLIENT)
 	client.set_player_res("res://player/player.tscn")
 	client.new_player.connect(_on_new_player_created, CONNECT_ONE_SHOT)
 	
@@ -88,11 +92,13 @@ func reset() -> void:
 	# remove references but dont manually free nodes
 	reference_synchronizers.clear()
 	reference_paths.clear()
-	
+
 	if view_scene:
 		view.remove_child(view_scene)
 		view_scene.queue_free()
 		view_scene = null
+		server = null
+		client = null
 		if %SceneOptions.is_split_view():
 			create_split_view()
 		else:
@@ -111,3 +117,8 @@ func _on_scene_options_scene_selected(path: String) -> void:
 
 func find_synchronizers(scene:Node )->Array[Node]:
 	return scene.find_children("*","MultiplayerSynchronizer")
+
+
+func _on_network_options_frame_delay(value: int) -> void:
+	server.enet.network_frame_delay = value
+	client.enet.network_frame_delay = value

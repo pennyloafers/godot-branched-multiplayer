@@ -77,10 +77,10 @@ func get_physics_body_info():
 
 func set_physics_body_info():
 	# client rpc set from server
-	var data :Array = ring_buffer.remove()
-	while data.is_empty():
-		return
-	set_state( body_state, data )
+	if ring_buffer.frame_count() > ring_buffer.low_wm:
+		var data :Array = ring_buffer.remove()
+		if not data.is_empty():
+			set_state( body_state, data )
 
 
 func _physics_process(_delta):
@@ -112,8 +112,9 @@ func is_previouse_frame() -> bool:
 		return false
 
 class RingBuffer extends Object:
-	const SAFETY:int = 1
-	const CAPACITY:int = 1 + SAFETY
+	const CAPACITY:int = 8
+	const low_wm:int = 1
+	const high_wm:int = 3
 	var buf:Array[Array]
 	var head:int = 0
 	var tail:int = 0
@@ -122,13 +123,12 @@ class RingBuffer extends Object:
 		buf.resize(CAPACITY)
 		for i in CAPACITY:
 			buf[i] = []
-		head = CAPACITY - SAFETY
 
 	func add(frame:Array):
 		if _increment(head) == tail: # full
-			print("physics syncer drop")
-			remove() #drop frame
-		buf[head]=frame
+			print_debug("physics syncer drop")
+			tail = _increment(tail)
+		buf[head] = frame
 		head = _increment(head)
 
 	func _increment(index:int)->int:
@@ -147,3 +147,12 @@ class RingBuffer extends Object:
 
 	func is_empty() -> bool:
 		return tail == head
+
+	func is_full() -> bool:
+		return _increment(head) == tail # full
+
+	func frame_count() -> int:
+		if head >= tail:
+			return head - tail
+		else:
+			return head + CAPACITY - tail

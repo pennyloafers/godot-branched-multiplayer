@@ -5,7 +5,7 @@ class_name ENetMultiplayerPeerExtension
 var _frame_buffer : Array[PackedByteArray]
 var delay_ring_buffer : RingBuffer # lock free
 
-var network_frame_delay : int = 32
+var network_frame_delay : int = 0
 
 func _init():
 	super()
@@ -24,12 +24,10 @@ func _put_packet_script(p_buffer: PackedByteArray) -> Error:
 		enet.put_packet(p_buffer)
 	return OK
 
-var poll_count:int
+
 func _poll() -> void:
 	if network_frame_delay != 0:
 		delay_put_packet()
-	poll_count+=1
-	#print(peer_type, ": poll_count ", poll_count)
 	enet.poll()
 
 
@@ -39,20 +37,16 @@ func delay_put_packet():
 	_frame_buffer = empty_frame
 	_frame_buffer.clear()
 
-	# build delay
-	if delay_ring_buffer.size() <= network_frame_delay:
-		pass
-	else:
-		#consume delay
-		while(delay_ring_buffer.size() > network_frame_delay) :
-			var frame : Array[PackedByteArray] = delay_ring_buffer.remove()
-			for packet in frame :
-				enet.put_packet(packet)
+	# build delay, then consume extra
+	while(delay_ring_buffer.frame_count() >= network_frame_delay) :
+		var frame : Array[PackedByteArray] = delay_ring_buffer.remove()
+		for packet in frame :
+			enet.put_packet(packet)
 
 
-#NOTE: rember do not add specific delay behavior here manage outside of this class
+## NOTE: REMEMBER! do not add specific delay behavior here manage outside of this class
 class RingBuffer extends Resource:
-	const CAPACITY:int = 128
+	const CAPACITY:int = 32
 	var buf:Array[Array]
 	var head:int = 0
 	var tail:int = 0
@@ -61,8 +55,7 @@ class RingBuffer extends Resource:
 		buf.resize(CAPACITY)
 		# Fill the Buffer
 		for i in CAPACITY:
-			var empty_frame : Array[PackedByteArray] = []
-			buf[i] = empty_frame
+			buf[i] = [] as Array[PackedByteArray]
 			
 
 	### Will return null frame if buffer is not filled first in _init
@@ -72,8 +65,8 @@ class RingBuffer extends Resource:
 		ret_frame = buf[head]
 		buf[head] = frame
 		if is_full():
-			remove()
 			print("dropped frame")
+			tail = _increment(tail)
 		head = _increment(head)
 		return ret_frame
 
@@ -98,7 +91,7 @@ class RingBuffer extends Resource:
 	func is_full() -> bool:
 		return _increment(head) == tail # full
 	
-	func size() -> int:
+	func frame_count() -> int:
 		if head >= tail:
 			return head - tail
 		else:
