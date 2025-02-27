@@ -5,11 +5,10 @@ class_name ENetMultiplayerPeerExtension
 var _frame_buffer : Array[PackedByteArray]
 var delay_ring_buffer : RingBuffer # lock free
 
-var network_frame_delay : int = 2
+var network_frame_delay : int = 32
 
 func _init():
 	super()
-	_frame_buffer.resize(32)
 	delay_ring_buffer = RingBuffer.new() 
 
 ## we use put_packet to delay because get_packet looks at
@@ -18,39 +17,42 @@ func _init():
 ## packet just use the simpler approach. 
 # gdscript only as _put_packet() uses native parameters
 func _put_packet_script(p_buffer: PackedByteArray) -> Error:
-	if p_buffer.size() == 7:
-		print(p_buffer)
-		print(Time.get_datetime_string_from_system())
-	_frame_buffer.push_back(p_buffer)
+	#print(peer_type, ": packet ", p_buffer)
+	if network_frame_delay != 0:
+		_frame_buffer.push_back(p_buffer)
+	else:
+		enet.put_packet(p_buffer)
 	return OK
 
+var poll_count:int
 func _poll() -> void:
-	delay_put_packet()
+	if network_frame_delay != 0:
+		delay_put_packet()
+	poll_count+=1
+	#print(peer_type, ": poll_count ", poll_count)
 	enet.poll()
 
 
 func delay_put_packet():
 	# add frame
 	var empty_frame = delay_ring_buffer.add(_frame_buffer)
+	_frame_buffer = empty_frame
+	_frame_buffer.clear()
 
 	# build delay
-	if delay_ring_buffer.size() < network_frame_delay:
-		_frame_buffer = empty_frame
-		_frame_buffer.clear()
-		return
-
-	#consume delay
-	while(delay_ring_buffer.size() > network_frame_delay) :
-		var frame : Array[PackedByteArray] = delay_ring_buffer.remove()
-		for packet in frame :
-			enet.put_packet(packet)
-		_frame_buffer = frame
-		_frame_buffer.clear()
+	if delay_ring_buffer.size() <= network_frame_delay:
+		pass
+	else:
+		#consume delay
+		while(delay_ring_buffer.size() > network_frame_delay) :
+			var frame : Array[PackedByteArray] = delay_ring_buffer.remove()
+			for packet in frame :
+				enet.put_packet(packet)
 
 
 #NOTE: rember do not add specific delay behavior here manage outside of this class
 class RingBuffer extends Resource:
-	const CAPACITY:int = 512
+	const CAPACITY:int = 128
 	var buf:Array[Array]
 	var head:int = 0
 	var tail:int = 0
@@ -58,10 +60,8 @@ class RingBuffer extends Resource:
 	func _init():
 		buf.resize(CAPACITY)
 		# Fill the Buffer
-		print("filling")
 		for i in CAPACITY:
 			var empty_frame : Array[PackedByteArray] = []
-			empty_frame.resize(32)
 			buf[i] = empty_frame
 			
 
@@ -70,7 +70,7 @@ class RingBuffer extends Resource:
 		var ret_frame :  Array[PackedByteArray]
 		# return the empty frame for re-use
 		ret_frame = buf[head]
-		buf[head]=frame
+		buf[head] = frame
 		if is_full():
 			remove()
 			print("dropped frame")
@@ -102,4 +102,4 @@ class RingBuffer extends Resource:
 		if head >= tail:
 			return head - tail
 		else:
-			return head + CAPACITY + 1 - tail
+			return head + CAPACITY - tail
