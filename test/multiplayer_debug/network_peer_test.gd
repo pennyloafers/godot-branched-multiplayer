@@ -58,7 +58,7 @@ func test_ring_buffer() -> void:
 	var frame :  Array[PackedByteArray] = []
 
 	assert_int(rb.buf.size()).is_equal(CAPACITY)
-	assert_int(rb.size()).is_equal(0)
+	assert_int(rb.frame_count()).is_equal(0)
 
 	# add
 	for i in CAPACITY:
@@ -70,7 +70,7 @@ func test_ring_buffer() -> void:
 			break
 	
 	assert_bool(rb.is_full()).is_true()
-	assert_int(rb.size()).is_equal(CAPACITY-1)
+	assert_int(rb.frame_count()).is_equal(CAPACITY-1)
 	assert_int(rb.head).is_equal(CAPACITY-1)
 	assert_int(rb.tail).is_equal(0)
 
@@ -101,11 +101,11 @@ func test_ring_buffer() -> void:
 	# 	frame = empty_frame
 	# 	frame.clear()
 	# 	# build delay
-	# 	if rb.size() <= DELAY:
+	# 	if rb.frame_count() <= DELAY:
 	# 		print("delay ", empty_frame)
 	# 	else:
 	# 		#consume delay
-	# 		while(rb.size() > DELAY) :
+	# 		while(rb.frame_count() > DELAY) :
 	# 			var frm : Array[PackedByteArray] = rb.remove()
 	# 			print("remove frame ", frm)
 	# 			for packet in frm :
@@ -113,7 +113,7 @@ func test_ring_buffer() -> void:
 	# 			# frame = frm
 	# 			# frame.clear()
 	# 	print_buffer(rb)
-	# 	print("s:%d h:%d t:%d" % [rb.size(), rb.head, rb.tail])
+	# 	print("s:%d h:%d t:%d" % [rb.frame_count(), rb.head, rb.tail])
 	# print_buffer(rb)
 	
 

@@ -59,7 +59,7 @@ func _ready() -> void:
 			self.name = "client" + str(client_count) 
 			api.connected_to_server.connect(_on_connected_to_server)
 			$Timer.timeout.connect(request_server_rtt)
-			#$Timer.start()
+			$Timer.start()
 		_:
 			printerr(name, ": Invalid Network Type")
 			return

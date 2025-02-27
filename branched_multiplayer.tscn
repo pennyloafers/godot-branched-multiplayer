@@ -68,3 +68,4 @@ size_flags_vertical = 3
 [connection signal="pressed" from="TwoColumn/Options/Reset" to="." method="_on_reset_pressed"]
 [connection signal="scene_selected" from="TwoColumn/Options/SceneOptions" to="." method="_on_scene_options_scene_selected"]
 [connection signal="split_view_change" from="TwoColumn/Options/SceneOptions" to="." method="_on_scene_options_split_view_change"]
+[connection signal="frame_delay" from="TwoColumn/Options/NetworkOptions" to="." method="_on_network_options_frame_delay"]
