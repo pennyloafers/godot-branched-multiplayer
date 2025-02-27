@@ -1,10 +1,23 @@
-[gd_scene format=3 uid="uid://dbpfj6ktqqfgj"]
+[gd_scene load_steps=2 format=3 uid="uid://dbpfj6ktqqfgj"]
 
-[node name="NetStats" type="Panel"]
-size_flags_horizontal = 3
+[sub_resource type="GDScript" id="GDScript_hveos"]
+resource_name = "NetStats"
+script/source = "extends VBoxContainer
 
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Network Stats"
+
+func ping_update(value:int):
+	$Ping.text = \"Ping: %d ms\" % [value]
+"
+
+[node name="NetStats" type="VBoxContainer"]
+offset_right = 110.0
+offset_bottom = 50.0
+script = SubResource("GDScript_hveos")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 2
+text = "Network Stats:"
+
+[node name="Ping" type="Label" parent="."]
+layout_mode = 2
+text = "Ping: n/a"
