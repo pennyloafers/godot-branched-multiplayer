@@ -28,18 +28,78 @@ suffix = "Frames"
 [node name="DelaySlider" type="HSlider" parent="."]
 layout_mode = 2
 max_value = 30.0
+rounded = true
 
 [node name="JitterCheckButton" type="CheckButton" parent="."]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Enable Jitter"
+tooltip_text = "Enables a chance for network Jitter.
+Stacks multiple frames to arrive at the peer as a single frame.
+Min and max controls the random number of frames to stack per jitter."
+text = "Network Jitter"
 
-[node name="JitterChance" type="HSlider" parent="."]
+[node name="HBoxContainer4" type="HBoxContainer" parent="."]
 layout_mode = 2
+
+[node name="Percentage" type="Label" parent="HBoxContainer4"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "50%"
+
+[node name="JitterChance" type="HSlider" parent="HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+tooltip_text = "Chance of Jitter occurance."
 max_value = 0.99
 step = 0.01
 value = 0.5
 
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="JitterMin" type="HSlider" parent="HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Min Jitter Frames"
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+rounded = true
+
+[node name="JitterMax" type="HSlider" parent="HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Max Jitter Frames"
+max_value = 10.0
+value = 5.0
+rounded = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="JitterMinValue" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Min = 1
+"
+horizontal_alignment = 1
+
+[node name="JitterMaxValue" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Max = 5
+"
+horizontal_alignment = 1
+
 [connection signal="value_changed" from="DelaySpinBox" to="." method="_on_delay_spin_box_value_changed"]
 [connection signal="value_changed" from="DelaySlider" to="." method="_on_delay_slider_value_changed"]
 [connection signal="toggled" from="JitterCheckButton" to="." method="_on_jitter_check_button_toggled"]
-[connection signal="value_changed" from="JitterChance" to="." method="_on_jitter_chance_value_changed"]
+[connection signal="value_changed" from="HBoxContainer4/JitterChance" to="." method="_on_jitter_chance_value_changed"]
+[connection signal="value_changed" from="HBoxContainer2/JitterMin" to="." method="_on_jitter_min_value_changed"]
+[connection signal="value_changed" from="HBoxContainer2/JitterMax" to="." method="_on_jitter_max_value_changed"]

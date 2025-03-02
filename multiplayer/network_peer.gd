@@ -59,7 +59,6 @@ func _ready() -> void:
 			self.name = "client" + str(client_count) 
 			api.connected_to_server.connect(_on_connected_to_server)
 			$Timer.timeout.connect(request_server_rtt)
-			$Timer.start()
 		_:
 			printerr(name, ": Invalid Network Type")
 			return
@@ -84,6 +83,8 @@ func _on_connected_to_server():
 	var node = Node.new()
 	node.name = "id_" + str(multiplayer.get_unique_id())
 	add_child(node)
+	$Timer.start()
+
 
 
 func _on_peer_connected(id):
