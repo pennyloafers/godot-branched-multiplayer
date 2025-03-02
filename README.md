@@ -11,15 +11,18 @@ This repository is an exploration of Godot 4.x SceneMultiplayer API to its fulle
 - Branched MultiplayerAPIs for single and split viewports in one process.
 - Uses Multiplayer Nodes. (MultiplayerSynchronizer, MultiplayerSpawner)
 - SceneMultiplayer wrapped with MultiplayerAPIExtension for debug output.
-- ENetMultiplayerPeer wrapped with MultiplayerPeerExtension with configurable packet delay, loss, and jitter.
+- ENetMultiplayerPeer wrapped with MultiplayerPeerExtension with configurable packet delay, packet loss, and packet jitter.
 - Non-destructive and editable SceneReplicationConfigs for MultiplayerSynchronizers.
+- Player synchronizer with ring-buffer to reduce jitter.
+
 
 ## Roadmap
-- TODO: Built-in packet delay and packet loss modifiers.
-- TODO: lots of user facing UI for statistics
-- TODO: lots of options for adjusting synchronization
+- TODO: Add more meaningful network statistics
+- TODO: Add meaningful sync object statistics
 - TODO: various sandbox test scenarious and game design 3d/2d/ui
-- TODO: Make editor pluggin to support 3rd party projects.
+- TODO: add player/level selection for test scene
+- TODO: devise a means to dynamically setup server/client visualization
+- TODO: Make editor pluggin to support external party projects.
 
 ## Preview
 [position_only.webm](https://github.com/user-attachments/assets/ec509dc3-7801-44f1-b032-fedfa7be4a8f)
