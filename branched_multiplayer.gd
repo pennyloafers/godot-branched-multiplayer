@@ -138,3 +138,10 @@ func _on_network_options_jitter_enabled(value: bool) -> void:
 func _on_network_options_jitter_chance(value: float) -> void:
 	server.enet.jitter_chance = value
 	client.enet.jitter_chance = value
+
+
+func _on_network_options_jitter_range( min_value: int, max_value: int) -> void:
+	server.enet.jitter_min = min_value
+	server.enet.jitter_max = max_value
+	client.enet.jitter_min = min_value
+	client.enet.jitter_max = max_value

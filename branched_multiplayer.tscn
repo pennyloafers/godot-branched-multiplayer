@@ -72,3 +72,4 @@ size_flags_vertical = 3
 [connection signal="frame_delay" from="TwoColumn/Options/NetworkOptions" to="." method="_on_network_options_frame_delay"]
 [connection signal="jitter_chance" from="TwoColumn/Options/NetworkOptions" to="." method="_on_network_options_jitter_chance"]
 [connection signal="jitter_enabled" from="TwoColumn/Options/NetworkOptions" to="." method="_on_network_options_jitter_enabled"]
+[connection signal="jitter_range" from="TwoColumn/Options/NetworkOptions" to="." method="_on_network_options_jitter_range"]

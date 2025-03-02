@@ -9,8 +9,10 @@ var network_frame_delay : int = 0
 var jitter_enabled : bool = false
 var jitter : bool = false
 var jitter_chance : float = 0.5
+var jitter_min : int = 1
+var jitter_max : int = 5
 var jitter_frame : Array[PackedByteArray] = []
-var jitter_frame_count : int = 2
+var jitter_frame_count : int = 0
 
 func _init():
 	super()
@@ -51,7 +53,7 @@ func _poll() -> void:
 		jitter = randf() < jitter_chance
 		jitter_frame_count = 0
 		if jitter:
-			jitter_frame_count = randi_range(1,5) #TODO make this adjustable
+			jitter_frame_count = randi_range(jitter_min, jitter_max)
 
 
 func delay_put_packet():

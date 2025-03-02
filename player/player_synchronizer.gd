@@ -112,7 +112,7 @@ func is_previouse_frame() -> bool:
 		return false
 
 class RingBuffer extends Object:
-	const CAPACITY:int = 8
+	const CAPACITY:int = 5
 	const low_wm:int = 1
 	const high_wm:int = 3
 	var buf:Array[Array]
