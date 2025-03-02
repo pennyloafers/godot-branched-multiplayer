@@ -73,3 +73,5 @@ size_flags_vertical = 3
 [connection signal="jitter_chance" from="TwoColumn/Options/NetworkOptions" to="." method="_on_network_options_jitter_chance"]
 [connection signal="jitter_enabled" from="TwoColumn/Options/NetworkOptions" to="." method="_on_network_options_jitter_enabled"]
 [connection signal="jitter_range" from="TwoColumn/Options/NetworkOptions" to="." method="_on_network_options_jitter_range"]
+[connection signal="packet_loss_chance" from="TwoColumn/Options/NetworkOptions" to="." method="_on_network_options_packet_loss_chance"]
+[connection signal="packet_loss_enabled" from="TwoColumn/Options/NetworkOptions" to="." method="_on_network_options_packet_loss_enabled"]

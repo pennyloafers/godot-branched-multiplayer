@@ -13,6 +13,8 @@ var jitter_min : int = 1
 var jitter_max : int = 5
 var jitter_frame : Array[PackedByteArray] = []
 var jitter_frame_count : int = 0
+var packet_loss_enabled : bool = false
+var packet_loss_chance : float = 0.5
 
 func _init():
 	super()
@@ -25,6 +27,9 @@ func _init():
 # gdscript only as _put_packet() uses native parameters
 func _put_packet_script(p_buffer: PackedByteArray) -> Error:
 	#print(peer_type, ": packet ", p_buffer)
+	if packet_loss_enabled:
+		if randf() < packet_loss_chance:
+			p_buffer.clear()
 	if jitter :
 		jitter_frame.push_back(p_buffer)
 	else:
